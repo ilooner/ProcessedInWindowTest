@@ -50,13 +50,13 @@ public class TestProcessInWindow implements Operator, IdleTimeHandler
   @Override
   public void endWindow()
   {
+    inWindow = false;
+
     try {
       lock.acquire();
     } catch (InterruptedException ex) {
       throw new RuntimeException(ex);
     }
-
-    inWindow = false;
   }
 
   @Override
