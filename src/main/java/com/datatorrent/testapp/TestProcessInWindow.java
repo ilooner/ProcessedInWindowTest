@@ -72,6 +72,10 @@ public class TestProcessInWindow implements Operator, IdleTimeHandler
   @Override
   public void handleIdleTime()
   {
+    if (!inWindow) {
+      throw new RuntimeException("Not In Window");
+    }
+
     try {
       lock.acquire();
     } catch (InterruptedException ex) {
