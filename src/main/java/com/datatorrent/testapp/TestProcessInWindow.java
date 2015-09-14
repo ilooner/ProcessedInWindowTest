@@ -19,11 +19,16 @@ import java.util.logging.Logger;
 public class TestProcessInWindow implements Operator, IdleTimeHandler
 {
   private transient Semaphore lock = new Semaphore(0);
+  private boolean inWindow = false;
 
   public final transient DefaultInputPort<Double> out = new DefaultInputPort<Double>() {
     @Override
     public void process(Double t)
     {
+      if(!inWindow) {
+        throw new RuntimeException("Not In Window");
+      }
+
       try {
         lock.acquire();
       } catch (InterruptedException ex) {
@@ -38,6 +43,8 @@ public class TestProcessInWindow implements Operator, IdleTimeHandler
   public void beginWindow(long l)
   {
     lock.release();
+
+    inWindow = true;
   }
 
   @Override
@@ -48,6 +55,8 @@ public class TestProcessInWindow implements Operator, IdleTimeHandler
     } catch (InterruptedException ex) {
       throw new RuntimeException(ex);
     }
+
+    inWindow = false;
   }
 
   @Override
