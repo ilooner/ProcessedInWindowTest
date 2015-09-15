@@ -30,6 +30,6 @@ public class Application implements StreamingApplication
     TestProcessInWindow testProcessInWindow = dag.addOperator("TestProcessInWindow", TestProcessInWindow.class);
 
     dag.addStream("randomData", randomGenerator.out, testProcessInWindow.input);
-    dag.addStream("randomData", randomGenerator2.out, testProcessInWindow.input2);
+    dag.addStream("randomData2", randomGenerator2.out, testProcessInWindow.input2);
   }
 }
