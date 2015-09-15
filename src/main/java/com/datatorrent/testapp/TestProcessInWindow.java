@@ -16,7 +16,7 @@ import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class TestProcessInWindow implements Operator, IdleTimeHandler
+public class TestProcessInWindow implements Operator
 {
   private transient Semaphore lock = new Semaphore(0);
   private boolean inWindow = false;
@@ -69,6 +69,7 @@ public class TestProcessInWindow implements Operator, IdleTimeHandler
   {
   }
 
+  /*
   @Override
   public void handleIdleTime()
   {
@@ -84,4 +85,5 @@ public class TestProcessInWindow implements Operator, IdleTimeHandler
 
     lock.release();
   }
+  */
 }
