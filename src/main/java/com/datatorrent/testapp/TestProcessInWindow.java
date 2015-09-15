@@ -35,6 +35,12 @@ public class TestProcessInWindow implements Operator
         throw new RuntimeException(ex);
       }
 
+      try {
+        Thread.sleep(1);
+      } catch (InterruptedException ex) {
+        throw new RuntimeException(ex);
+      }
+
       lock.release();
     }
   };
