@@ -21,7 +21,25 @@ public class TestProcessInWindow implements Operator
   private transient Semaphore lock = new Semaphore(0);
   private boolean inWindow = false;
 
-  public final transient DefaultInputPort<Double> out = new DefaultInputPort<Double>() {
+  public final transient DefaultInputPort<Double> input = new DefaultInputPort<Double>() {
+    @Override
+    public void process(Double t)
+    {
+      if(!inWindow) {
+        throw new RuntimeException("Not In Window");
+      }
+
+      try {
+        lock.acquire();
+      } catch (InterruptedException ex) {
+        throw new RuntimeException(ex);
+      }
+
+      lock.release();
+    }
+  };
+
+  public final transient DefaultInputPort<Double> input2 = new DefaultInputPort<Double>() {
     @Override
     public void process(Double t)
     {
