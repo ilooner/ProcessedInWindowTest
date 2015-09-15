@@ -22,7 +22,7 @@ public class Application implements StreamingApplication
     // Replace this code with the DAG you want to build
 
     RandomNumberGenerator randomGenerator = dag.addOperator("randomGenerator", RandomNumberGenerator.class);
-    randomGenerator.setNumTuples(1000);
+    randomGenerator.setNumTuples(100000);
 
     TestProcessInWindow testProcessInWindow = dag.addOperator("TestProcessInWindow", TestProcessInWindow.class);
 
