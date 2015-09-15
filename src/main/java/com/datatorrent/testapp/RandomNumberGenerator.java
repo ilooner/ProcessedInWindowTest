@@ -22,40 +22,26 @@ public class RandomNumberGenerator extends BaseOperator implements InputOperator
   public final transient DefaultOutputPort<Double> out = new DefaultOutputPort<Double>();
   private transient Random rand = new Random();
 
+  private boolean inWindow = false;
+
   @Override
   public void beginWindow(long windowId)
   {
-    count = 0;
+    inWindow = true;
   }
 
   @Override
   public void emitTuples()
   {
-    if (count++ < numTuples) {
-      if(count % 100 == 0) {
-        try {
-          Thread.sleep(rand.nextInt(3) * 1);
-        } catch (InterruptedException ex) {
-          throw new RuntimeException(ex);
-        }
-      }
-      out.emit(Math.random());
+    if(!inWindow) {
+      throw new RuntimeException("emit tuple called within beginWindow");
     }
   }
 
   @Override
   public void endWindow()
   {
-    for(int counter = 0; counter < numTuples; counter++) {
-      if(counter % 100 == 0) {
-        try {
-          Thread.sleep(rand.nextInt(3) * 500);
-        } catch (InterruptedException ex) {
-          throw new RuntimeException(ex);
-        }
-      }
-      out.emit(Math.random());
-    }
+    inWindow = false;
   }
 
   public int getNumTuples()
