@@ -34,7 +34,7 @@ public class RandomNumberGenerator extends BaseOperator implements InputOperator
     if (count++ < numTuples) {
       if(count % 100 == 0) {
         try {
-          Thread.sleep(rand.nextInt(3) * 500);
+          Thread.sleep(rand.nextInt(3) * 1);
         } catch (InterruptedException ex) {
           throw new RuntimeException(ex);
         }
