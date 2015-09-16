@@ -65,7 +65,7 @@ public class TestProcessInWindow implements Operator
           count++;
         }
       }
-    });
+    }).start();
   }
 
   @Override
