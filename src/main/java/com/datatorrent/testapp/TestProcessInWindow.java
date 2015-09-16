@@ -12,6 +12,10 @@ import com.datatorrent.api.DefaultOutputPort;
 import com.datatorrent.api.Operator;
 import com.datatorrent.api.Operator.IdleTimeHandler;
 
+import com.datatorrent.common.util.NameableThreadFactory;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,6 +24,9 @@ public class TestProcessInWindow implements Operator
 {
   private boolean inWindow = false;
   private volatile transient int count;
+
+  protected transient ExecutorService processingThread;
+  private transient Thread mainThread;
 
   public final transient DefaultInputPort<Double> input = new DefaultInputPort<Double>() {
     @Override
@@ -57,15 +64,17 @@ public class TestProcessInWindow implements Operator
   @Override
   public void setup(OperatorContext cntxt)
   {
-    new Thread(new Runnable() {
+    processingThread = Executors.newSingleThreadScheduledExecutor(new NameableThreadFactory("Query Executor Thread"));
+    processingThread.submit(new Runnable() {
       @Override
       public void run()
       {
         while(true) {
           count++;
+          Math.abs(count);
         }
       }
-    }).start();
+    });
   }
 
   @Override
