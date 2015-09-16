@@ -60,6 +60,11 @@ public class TestProcessInWindow implements Operator
   @Override
   public void beginWindow(long l)
   {
+    try {
+      Thread.sleep(100);
+    } catch (InterruptedException ex) {
+      throw new RuntimeException(ex);
+    }
     lock.release();
 
     inWindow = true;
