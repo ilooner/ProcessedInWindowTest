@@ -24,7 +24,6 @@ import java.util.logging.Logger;
 public class TestProcessInWindow implements Operator
 {
   private boolean inWindow = false;
-  private volatile transient int count;
 
   protected transient ExecutorService processingThread;
   private transient Thread mainThread;
@@ -53,7 +52,6 @@ public class TestProcessInWindow implements Operator
   public void beginWindow(long l)
   {
     inWindow = true;
-    Math.abs(count);
   }
 
   @Override
@@ -66,20 +64,37 @@ public class TestProcessInWindow implements Operator
   public void setup(OperatorContext cntxt)
   {
     processingThread = Executors.newSingleThreadScheduledExecutor(new NameableThreadFactory("Query Executor Thread"));
-    processingThread.submit(new Runnable() {
-      @Override
-      public void run()
-      {
-        while(true) {
+    processingThread.submit(new TestRunnable(Thread.currentThread()));
+  }
 
-          if(count % 10000 == 0) {
-            LOG.info("{}", count);
-          }
-          count++;
-          Math.abs(count);
+  public static class TestRunnable implements Runnable
+  {
+    private Thread mainThread;
+
+    public TestRunnable(Thread mainThread)
+    {
+      this.mainThread = mainThread;
+    }
+
+    @Override
+    public void run()
+    {
+      int count = 0;
+
+      while (true) {
+
+        if (count % 10000000 == 0) {
+          LOG.info("{}", count);
         }
+
+        if(System.currentTimeMillis() == -1L) {
+          mainThread.interrupt();
+        }
+
+        count++;
+        Math.abs(count);
       }
-    });
+    }
   }
 
   @Override
