@@ -31,14 +31,14 @@ public class RandomNumberGenerator extends BaseOperator implements InputOperator
   @Override
   public void emitTuples()
   {
-    for(; count < numTuples; count++) {
-      out.emit(Math.random());
-    }
   }
 
   @Override
   public void endWindow()
   {
+    for(; count < numTuples; count++) {
+      out.emit(Math.random());
+    }
   }
 
   public int getNumTuples()
