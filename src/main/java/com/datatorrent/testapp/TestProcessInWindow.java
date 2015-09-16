@@ -13,6 +13,7 @@ import com.datatorrent.api.Operator;
 import com.datatorrent.api.Operator.IdleTimeHandler;
 
 import com.datatorrent.common.util.NameableThreadFactory;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -70,6 +71,10 @@ public class TestProcessInWindow implements Operator
       public void run()
       {
         while(true) {
+
+          if(count % 10000 == 0) {
+            LOG.info("{}", count);
+          }
           count++;
           Math.abs(count);
         }
@@ -99,4 +104,6 @@ public class TestProcessInWindow implements Operator
     lock.release();
   }
   */
+
+  private static final org.slf4j.Logger LOG = LoggerFactory.getLogger(TestProcessInWindow.class);
 }
