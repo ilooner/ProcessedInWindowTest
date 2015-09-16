@@ -58,7 +58,7 @@ public class TestProcessInWindow implements Operator
       } catch (InterruptedException ex) {
         throw new RuntimeException(ex);
       }
-      
+
       try {
         Thread.sleep(1);
       } catch (InterruptedException ex) {
@@ -72,6 +72,12 @@ public class TestProcessInWindow implements Operator
   @Override
   public void beginWindow(long l)
   {
+    try {
+      Thread.sleep(100);
+    } catch (InterruptedException ex) {
+      throw new RuntimeException(ex);
+    }
+
     lock.release();
 
     inWindow = true;
