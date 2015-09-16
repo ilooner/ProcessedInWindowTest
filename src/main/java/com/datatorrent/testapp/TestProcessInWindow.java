@@ -18,7 +18,6 @@ import java.util.logging.Logger;
 
 public class TestProcessInWindow implements Operator
 {
-  private transient Semaphore lock = new Semaphore(0);
   private boolean inWindow = false;
 
   public final transient DefaultInputPort<Double> input = new DefaultInputPort<Double>() {
@@ -28,20 +27,6 @@ public class TestProcessInWindow implements Operator
       if(!inWindow) {
         throw new RuntimeException("Not In Window");
       }
-
-      try {
-        lock.acquire();
-      } catch (InterruptedException ex) {
-        throw new RuntimeException(ex);
-      }
-
-      try {
-        Thread.sleep(1);
-      } catch (InterruptedException ex) {
-        throw new RuntimeException(ex);
-      }
-
-      lock.release();
     }
   };
 
@@ -52,20 +37,6 @@ public class TestProcessInWindow implements Operator
       if(!inWindow) {
         throw new RuntimeException("Not In Window");
       }
-
-      try {
-        lock.acquire();
-      } catch (InterruptedException ex) {
-        throw new RuntimeException(ex);
-      }
-
-      try {
-        Thread.sleep(1);
-      } catch (InterruptedException ex) {
-        throw new RuntimeException(ex);
-      }
-
-      lock.release();
     }
   };
 
@@ -78,8 +49,6 @@ public class TestProcessInWindow implements Operator
       throw new RuntimeException(ex);
     }
 
-    lock.release();
-
     inWindow = true;
   }
 
@@ -87,12 +56,6 @@ public class TestProcessInWindow implements Operator
   public void endWindow()
   {
     inWindow = false;
-
-    try {
-      lock.acquire();
-    } catch (InterruptedException ex) {
-      throw new RuntimeException(ex);
-    }
   }
 
   @Override

@@ -31,14 +31,7 @@ public class RandomNumberGenerator extends BaseOperator implements InputOperator
   @Override
   public void emitTuples()
   {
-    if (count++ < numTuples) {
-      if(count % 100 == 0) {
-        try {
-          Thread.sleep(rand.nextInt(3) * 1);
-        } catch (InterruptedException ex) {
-          throw new RuntimeException(ex);
-        }
-      }
+    for(; count < numTuples; count++) {
       out.emit(Math.random());
     }
   }
@@ -46,16 +39,6 @@ public class RandomNumberGenerator extends BaseOperator implements InputOperator
   @Override
   public void endWindow()
   {
-    for(int counter = 0; counter < numTuples; counter++) {
-      if(counter % 100 == 0) {
-        try {
-          Thread.sleep(rand.nextInt(3) * 500);
-        } catch (InterruptedException ex) {
-          throw new RuntimeException(ex);
-        }
-      }
-      out.emit(Math.random());
-    }
   }
 
   public int getNumTuples()
