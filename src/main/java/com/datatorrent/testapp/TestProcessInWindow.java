@@ -27,6 +27,7 @@ public class TestProcessInWindow implements Operator
 
   protected transient ExecutorService processingThread;
   private transient Thread mainThread;
+  private final transient Semaphore lock = new Semaphore(0);
 
   public final transient DefaultInputPort<Double> input = new DefaultInputPort<Double>() {
     @Override
@@ -52,11 +53,13 @@ public class TestProcessInWindow implements Operator
   public void beginWindow(long l)
   {
     inWindow = true;
+    lock.release();
   }
 
   @Override
   public void endWindow()
   {
+    lock.acquireUninterruptibly();
     inWindow = false;
   }
 
@@ -67,7 +70,7 @@ public class TestProcessInWindow implements Operator
     processingThread.submit(new TestRunnable(Thread.currentThread()));
   }
 
-  public static class TestRunnable implements Runnable
+  public class TestRunnable implements Runnable
   {
     private Thread mainThread;
 
@@ -86,6 +89,14 @@ public class TestProcessInWindow implements Operator
         if (count % 10000000 == 0) {
           LOG.info("{}", count);
         }
+
+        lock.acquireUninterruptibly();
+
+        for(int counter = 0; counter < 100000; counter++) {
+          count++;
+        }
+
+        lock.release();
 
         if(System.currentTimeMillis() == -1L) {
           mainThread.interrupt();
