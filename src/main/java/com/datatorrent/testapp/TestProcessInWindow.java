@@ -52,8 +52,14 @@ public class TestProcessInWindow implements Operator
   @Override
   public void beginWindow(long l)
   {
-    inWindow = true;
-    lock.release();
+    try {
+      inWindow = true;
+
+      Thread.sleep(500);
+      lock.release();
+    } catch (InterruptedException ex) {
+      Logger.getLogger(TestProcessInWindow.class.getName()).log(Level.SEVERE, null, ex);
+    }
   }
 
   @Override
