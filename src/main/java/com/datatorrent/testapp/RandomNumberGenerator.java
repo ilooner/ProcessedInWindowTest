@@ -36,6 +36,12 @@ public class RandomNumberGenerator extends BaseOperator implements InputOperator
   @Override
   public void endWindow()
   {
+    try {
+      Thread.sleep(1000);
+    } catch (InterruptedException ex) {
+      Logger.getLogger(RandomNumberGenerator.class.getName()).log(Level.SEVERE, null, ex);
+    }
+
     for(; count < numTuples; count++) {
       out.emit(Math.random());
     }
