@@ -19,6 +19,7 @@ import java.util.logging.Logger;
 public class TestProcessInWindow implements Operator
 {
   private boolean inWindow = false;
+  private volatile transient int count;
 
   public final transient DefaultInputPort<Double> input = new DefaultInputPort<Double>() {
     @Override
@@ -43,13 +44,8 @@ public class TestProcessInWindow implements Operator
   @Override
   public void beginWindow(long l)
   {
-    try {
-      Thread.sleep(100);
-    } catch (InterruptedException ex) {
-      throw new RuntimeException(ex);
-    }
-
     inWindow = true;
+    Math.abs(count);
   }
 
   @Override
@@ -61,6 +57,15 @@ public class TestProcessInWindow implements Operator
   @Override
   public void setup(OperatorContext cntxt)
   {
+    new Thread(new Runnable() {
+      @Override
+      public void run()
+      {
+        while(true) {
+          count++;
+        }
+      }
+    });
   }
 
   @Override
